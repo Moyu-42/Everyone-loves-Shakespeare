@@ -2,6 +2,7 @@ import torch
 import torch.utils.data as Data
 import torch.nn as nn
 import torch.optim as optim
+import random
 import Transformer
 
 
@@ -36,7 +37,6 @@ def make_data(sentences, src_len, tgt_len):
         dec_inputs.extend(dec_input)
         dec_outputs.extend(dec_output)
 
-    print(enc_inputs)
     return torch.LongTensor(enc_inputs), torch.LongTensor(dec_inputs), torch.LongTensor(dec_outputs)
 
 
@@ -69,7 +69,49 @@ if __name__ == "__main__":
         ['Since sweets and beauties do themselves forsake , P', 'S Since sweets and beauties do themselves forsake ,', 'Since sweets and beauties do themselves forsake , E'],
         ['And die as fast as they see others grow ; P', 'S And die as fast as they see others grow ;', 'And die as fast as they see others grow ; E'],
         ['And nothing \'gainst Time\'s scythe can make defence ; P', 'S And nothing \'gainst Time\'s scythe can make defence ;', 'And nothing \'gainst Time\'s scythe can make defence ; E'],
-        ['Save breed, to brave him when he takes thee hence . P', 'S Save breed, to brave him when he takes thee hence .', 'Save breed, to brave him when he takes thee hence . E']
+        ['Save breed, to brave him when he takes thee hence . P', 'S Save breed, to brave him when he takes thee hence .', 'Save breed, to brave him when he takes thee hence . E'],
+        ['Shall I compare thee to a summer\'s day ? P', 'S Shall I compare thee to a summer\'s day ?', 'Shall I compare thee to a summer\'s day ? E'],
+        ['Thou art more lovely and more temperate : P', 'S Thou art more lovely and more temperate :', 'Thou art more lovely and more temperate : E'],
+        ['Rough winds do shake the darling buds of May , P', 'S Rough winds do shake the darling buds of May ,', 'Rough winds do shake the darling buds of May , E'],
+        ['And summer\'s lease hath all too short a date : P', 'S And summer\'s lease hath all too short a date :', 'And summer\'s lease hath all too short a date : E'],
+        ['Sometime too hot the eye of heaven shines , P', 'S Sometime too hot the eye of heaven shines ,', 'Sometime too hot the eye of heaven shines , E'],
+        ['And often is his gold complexion dimm\'d ; P', 'S And often is his gold complexion dimm\'d ;', 'And often is his gold complexion dimm\'d ; E'],
+        ['And every fair from fair sometime declines , P', 'S And every fair from fair sometime declines ,', 'And every fair from fair sometime declines , E'],
+        ['By chance or nature\'s changing course untrimm\'d , P', 'S By chance or nature\'s changing course untrimm\'d ,', 'By chance or nature\'s changing course untrimm\'d , E'],
+        ['But thy eternal summer shall not fade , P', 'S But thy eternal summer shall not fade ,', 'But thy eternal summer shall not fade , E'],
+        ['Nor lose possession of that fair thou owest ; P', 'S Nor lose possession of that fair thou owest ;', 'Nor lose possession of that fair thou owest ; E'],
+        ['Nor shall death brag thou wander\'st in his shade , P', 'S Nor shall death brag thou wander\'st in his shade ,', 'Nor shall death brag thou wander\'st in his shade , E'],
+        ['When in eternal lines to time thou growest : P', 'S When in eternal lines to time thou growest :', 'When in eternal lines to time thou growest : E'],
+        ['So long as men can breathe or eyes can see , P', 'S So long as men can breathe or eyes can see ,', 'So long as men can breathe or eyes can see , E'],
+        ['So long lives this and this gives life to thee . P', 'S So long lives this and this gives life to thee .', 'So long lives this and this gives life to thee . E'],
+        ['Cupid laid by his brand , and fell asleep : P', 'S Cupid laid by his brand , and fell asleep :', 'Cupid laid by his brand , and fell asleep : E'],
+        ['A maid of Dian\'s this advantage found , P', 'S A maid of Dian\'s this advantage found ,', 'A maid of Dian\'s this advantage found , E'],
+        ['And his love-kindling fire did quickly steep , P', 'S And his love-kindling fire did quickly steep ,', 'And his love-kindling fire did quickly steep , E'],
+        ['In a cold valley-fountain of that ground ; P', 'S In a cold valley-fountain of that ground ;', 'In a cold valley-fountain of that ground ; E'],
+        ['Which borrow\'d from this holy fire of Love , P', 'S Which borrow\'d from this holy fire of Love ,', 'Which borrow\'d from this holy fire of Love , E'],
+        ['A dateless lively heat , still to endure , P', 'S A dateless lively heat , still to endure ,', 'A dateless lively heat , still to endure , E'],
+        ['And grew a seething bath , whichyet men prove , P', 'S And grew a seething bath , whichyet men prove ,', 'And grew a seething bath , whichyet men prove , E'],
+        ['Against strange maladies a sovereign cure . P', 'S Against strange maladies a sovereign cure .', 'Against strange maladies a sovereign cure . E'],
+        ['But at my mistress\' eye Love\'s brand new-fired , P', 'S But at my mistress\' eye Love\'s brand new-fired ,', 'But at my mistress\' eye Love\'s brand new-fired , E'],
+        ['The boy for trial needs would touch my breast ; P', 'S The boy for trial needs would touch my breast ;', 'The boy for trial needs would touch my breast ; E'],
+        ['I , sick withal , the help of bath desired , P', 'S I , sick withal , the help of bath desired ,', 'I , sick withal , the help of bath desired , E'],
+        ['And thither hied , a sad distemper\'d guest , P', 'S And thither hied , a sad distemper\'d guest ,', 'And thither hied , a sad distemper\'d guest , E'],
+        ['But found no cure : the bath for my help lies , P', 'S But found no cure : the bath for my help lies ,', 'But found no cure : the bath for my help lies , E'],
+        ['Where Cupid got new fire--my mistress\' eyes . P', 'S Where Cupid got new fire--my mistress\' eyes .', 'Where Cupid got new fire--my mistress\' eyes . E'],
+        ['When I do count the clock that tells the time , P', 'S When I do count the clock that tells the time ,', 'When I do count the clock that tells the time , E'],
+        ['And see the brave day sunk in hideous night ; P', 'S And see the brave day sunk in hideous night ;', 'And see the brave day sunk in hideous night ; E'],
+        ['When I behold the violet past prime , P', 'S When I behold the violet past prime ,', 'When I behold the violet past prime , E'],
+        ['And sable curls all silver\'d o\'er with white : P', 'S And sable curls all silver\'d o\'er with white :', 'And sable curls all silver\'d o\'er with white : E'],
+        ['When lofty trees I see barren of leaves , P', 'S When lofty trees I see barren of leaves ,', 'When lofty trees I see barren of leaves , E'],
+        ['Which erst from heat did canopy the herd , P', 'S Which erst from heat did canopy the herd ,', 'Which erst from heat did canopy the herd , E'],
+        ['And summer\'s green , all girded up in sheaves , P', 'S And summer\'s green , all girded up in sheaves ,', 'And summer\'s green , all girded up in sheaves , E'],
+        ['Born on the bier with white and bristly beard ; P', 'S Born on the bier with white and bristly beard ;', 'Born on the bier with white and bristly beard ; E'],
+        ['Then of thy beauty do I question make , P', 'S Then of thy beauty do I question make ,', 'Then of thy beauty do I question make , E'],
+        ['That thou among the wastes of time must go , P', 'S That thou among the wastes of time must go ,', 'That thou among the wastes of time must go , E'],
+        ['Since sweets and beauties do themselves forsake , P', 'S Since sweets and beauties do themselves forsake ,', 'Since sweets and beauties do themselves forsake , E'],
+        ['And die as fast as they see others grow ; P', 'S And die as fast as they see others grow ;', 'And die as fast as they see others grow ; E'],
+        ['And nothing \'gainst Time\'s scythe can make defence P', 'S And nothing \'gainst Time\'s scythe can make defence', 'And nothing \'gainst Time\'s scythe can make defence E'],
+        ['Save breed , to brave him when he takes thee hence . P', 'S Save breed , to brave him when he takes thee hence .', 'Save breed , to brave him when he takes thee hence . E']
     ]
 
     # Padding
@@ -106,7 +148,7 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss(ignore_index=0)
     optimizer = optim.SGD(model.parameters(), lr=1e-3, momentum=0.99)
 
-    for epoch in range(30):
+    for epoch in range(15):
         for enc_inputs, dec_inputs, dec_outputs in loader:
             enc_inputs, dec_inputs, dec_outputs = enc_inputs.cuda(), dec_inputs.cuda(), dec_outputs.cuda()
             outputs, enc_self_attns, dec_self_attns, dec_enc_attns = model(enc_inputs, dec_inputs)
@@ -116,10 +158,16 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
 
-    enc_inputs, _, _ = next(iter(loader))
-    enc_inputs = torch.tensor([4])
-    print(enc_inputs)
+    enc_inputs = torch.randint(0, tgt_vocab_size, (1, 1))[0]
+    print(idx2word[enc_inputs[0].item()])
     greedy_dec_input = greedy_search(model, enc_inputs[0].view(1, -1).cuda(), start_symbol=tgt_vocab['S'])
     predict, _, _, _ = model(enc_inputs[0].view(1, -1).cuda(), greedy_dec_input)
     predict = predict.data.max(1, keepdim=True)[1]
-    print(enc_inputs[0], '->', [idx2word[n.item()] for n in predict.squeeze()])
+    # print(enc_inputs[0], '->', [idx2word[n.item()] for n in predict.squeeze()])
+    new_phrase = [idx2word[n.item()] for n in predict.squeeze()]
+    sentence = ""
+    for it in new_phrase:
+        if it == 'E':
+            break
+        sentence += ' ' + it
+    print(sentence)
