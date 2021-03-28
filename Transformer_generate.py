@@ -126,15 +126,17 @@ if __name__ == "__main__":
 
     torch.save(model, 'model.pt')
 
-    enc_inputs = torch.randint(0, tgt_vocab_size, (1, 1))[0]
-    greedy_dec_input = greedy_search(model, enc_inputs[0].view(1, -1).cuda(), start_symbol=tgt_vocab['S'])
-    predict, _, _, _ = model(enc_inputs[0].view(1, -1).cuda(), greedy_dec_input)
-    predict = predict.data.max(1, keepdim=True)[1]
-    new_phrase = [idx2word[n.item()] for n in predict.squeeze()]
-    print(new_phrase)
-    sentence = ""
-    for it in new_phrase:
-        if it == 'E':
-            continue
-        sentence += ' ' + it
-    print(sentence)
+    model.eval()
+    for i in range(10):
+        enc_inputs = torch.randint(0, tgt_vocab_size, (1, 1))[0]
+        greedy_dec_input = greedy_search(model, enc_inputs[0].view(1, -1).cuda(), start_symbol=tgt_vocab['S'])
+        predict, _, _, _ = model(enc_inputs[0].view(1, -1).cuda(), greedy_dec_input)
+        predict = predict.data.max(1, keepdim=True)[1]
+        new_phrase = [idx2word[n.item()] for n in predict.squeeze()]
+        # print(new_phrase)
+        sentence = ""
+        for it in new_phrase:
+            if it == 'E':
+                continue
+            sentence += ' ' + it
+        print(sentence)
